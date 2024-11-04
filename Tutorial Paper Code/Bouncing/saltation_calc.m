@@ -22,6 +22,9 @@ DtR21 = sym(zeros(2,1));
 f1 = [y_dot; -g];
 f2 = [-alpha*y_dot; -g];
 
+f1_plus = subs(f1, states, states_2_to_1);
+f2_plus = subs(f2, states, states_1_to_2);
+
 g1 = y;
 Dg1 = jacobian(g1,states);
 g2 = y_dot;
@@ -29,8 +32,12 @@ Dg2 = jacobian(g2,states);
 Dtg1 = 0;
 Dtg2 = 0;
 
-Xi_1 = simplify(DR12+(f2 - DR12*f1 - DtR12)*Dg1/(Dtg1 + Dg1*f1));
-Xi_2 = simplify(DR21+(f1 - DR21*f1 - DtR21)*Dg2/(Dtg2 + Dg2*f2));
+% Xi_1 = simplify(DR12+(f2 - DR12*f1 - DtR12)*Dg1/(Dtg1 + Dg1*f1));
+% Xi_2 = simplify(DR21+(f1 - DR21*f1 - DtR21)*Dg2/(Dtg2 + Dg2*f2));
+
+
+Xi_1 = simplify(DR12+(f2_plus - DR12*f1 - DtR12)*Dg1/(Dtg1 + Dg1*f1));
+Xi_2 = simplify(DR21+(f1_plus - DR21*f1 - DtR21)*Dg2/(Dtg2 + Dg2*f2));
 
 matlabFunction(Xi_1,'File','calc_Xi_1','Vars',[{states},{parameters}]);
 matlabFunction(Xi_2,'File','calc_Xi_2','Vars',[{states},{parameters}]);

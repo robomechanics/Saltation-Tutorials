@@ -32,8 +32,11 @@ Dg1 = jacobian(g1,states);
 
 Dtg1 = 0;
 
+f2_plus = subs(f2, states, states_1_to_2);
 
-Xi_1 = simplify(DR12+(f2 - DR12*f1 - DtR12)*Dg1/(Dtg1 + Dg1*f1));
+
+% Xi_1 = simplify(DR12+(f2 - DR12*f1 - DtR12)*Dg1/(Dtg1 + Dg1*f1));
+Xi_1 = simplify(DR12+(f2_plus - DR12*f1 - DtR12)*Dg1/(Dtg1 + Dg1*f1));
 Xi_2 = simplify(DR12);
 
 matlabFunction(Xi_1,'File','calc_Xi_1','Vars',[{states},{parameters}]);

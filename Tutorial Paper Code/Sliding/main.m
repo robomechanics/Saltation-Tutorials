@@ -4,7 +4,7 @@
 % Carnegie Mellon University Robomechanics Lab
 
 clear;
-close all;
+% close all;
 clc;
 
 rng(10)
