@@ -21,10 +21,11 @@ yJ = [q; q_dot];
 fI_disc = states + fI * dt;
 fJ_disc = states + fJ * dt;
 
-% Take the Jacobian of dynamics with respect to states and inputs
+% Take the Jacobian of dynamics with respect to states
 AI_disc = jacobian(fI_disc, states);
 AJ_disc = jacobian(fJ_disc, states);
 
+% Measurement Jacobians
 CI = jacobian(yI, states);
 CJ = jacobian(yJ, states);
 
