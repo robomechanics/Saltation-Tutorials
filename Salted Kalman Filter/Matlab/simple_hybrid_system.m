@@ -36,7 +36,7 @@ RJI = jacobian(rIJ, states);
 
 % Define guard functions
 gIJ = [-x1];  % Switch when x1 < 0
-gJI = [x1 - 10];       % No valid transition from J to I by default
+gJI = [x1 - 10]; % Guard for J to I included for code completion; set to occur beyond simulation time
 
 % Take the Jacobian of guards with respect to states
 GIJ = jacobian(gIJ, states);
