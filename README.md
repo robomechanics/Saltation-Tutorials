@@ -47,7 +47,7 @@ In addition, we implement a variety of hybrid systems to demonstrate the Salted 
 ## Salted Kalman Filter
 This code provides an example for implementing the SKF as defined in [The Salted Kalman Filter: Kalman Filtering on Hybrid Dynamical Systems](https://arxiv.org/abs/2007.12233).
 
-Key parameters such as initial state `q0`, process noise `W`, measurement noise `V`, guards, and resets can be tuned to improve estimation accuracy.
+Key parameters such as initial state `q0`, process noise `W`, and measurement noise `V` can be tuned to improve estimation accuracy.
 
 ### Models
 The code includes implementations in MATLAB and Python for the simple hybrid system, bouncing ball, and bouncing ball with moving guard (defined in the Hybrid System Models section above).
