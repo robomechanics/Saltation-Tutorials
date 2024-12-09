@@ -62,11 +62,12 @@ This code provides an implementation of the **hybrid iLQR algorithm**, as define
 
 The example model used for trajectory optimization is a **1D bouncing ball**, as defined in the **SFK section** above. This module also includes the option to model a time-varying guard, such as a paddle moving up and down to bounce the ball. Below are example optimized trajectories:
 
-- **Flat Ground Model**  
-  ![Flat Ground](https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_flat_guard_hilqr.png)
+- **Flat Ground Model**
+- 
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_flat_guard_hilqr.png" alt="Flat Ground" width="500">
   
 - **Moving Guard Model**  
-  ![Moving Guard](https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_moving_guard_hilqr.png)
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_moving_guard_hilqr.png" alt="Moving Guard" width="500">
 
 ### Structure of the Code
 
@@ -85,7 +86,7 @@ To generate the optimized trajectories and plots:
    These generated functions are named: `calc_A.m`, `calc_f1.m`, `calc_salt12.m`, etc. **Do not modify these directly**.
 
 3. **Modifying or Modeling a New System**:  
-   - To model a new system or modify the existing one, you need to update the expressions in the `bouncing_dynamics.m` file.
+   - To model a new system or modify the existing one, you need to update the expressions in the `bouncing_dynamics.m` file and rerun the optimization in `main.m`.
 
 4. **Trajectory Optimization**:  
    - The optimization is performed using the `hilqr.m` class. This class handles the forwards/backwards passes of the hybrid iLQR algorithm. 
@@ -96,5 +97,4 @@ To generate the optimized trajectories and plots:
 ### Additional Notes
 
 - Ensure you have MATLAB installed to run these scripts.
-- If you'd like to experiment with a different system or guard dynamics, you can modify the dynamics in `bouncing_dynamics.m` and rerun the optimization in `main.m`.
 
