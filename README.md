@@ -5,8 +5,13 @@ This code provides an example of how to generate Figure 1 (below) from our paper
 ## Salted Kalman Filter
 This code provides an example for implementing the SKF as defined in [The Salted Kalman Filter: Kalman Filtering on Hybrid Dynamical Systems](https://arxiv.org/abs/2007.12233).
 ### Models
-In the python implementation, 3 different systems are considered: 
+In the python implementation, 2 different systems are considered: a simple 1D switching system and a 1D bouncing ball with a vertical thruster. Examples of both filtered systems are shown below:
+
+![Simple SKF](simple_state_space.png)
+![Bouncing Ball SKF](bouncing_ball_skf.png)
+
 ### Structure
+To the run the examples, run the corresponding python file "simple_hybrid_system.py" or "bouncing_ball_hybrid_system.py". Parameters such as step size, noise covariances, etc. may be adjusted at the bottom of each script before running the function simuluate_timestep(). To simulate another systems dynamics, simply edit the expressions for the flows, guards, and resets in symbolic_dynamics() and rerun the file; no other changes should be necessary as the filter and saltation matrix are calculated automatically in "hybrid_helper_functions.py" and "skf.py".
  
 ## Hybrid iLQR
 This code provides an example for implementing the hybrid iLQR algoirthm as defined in [iLQR for Piecewise-Smooth Hybrid Dynamical Systems](https://arxiv.org/abs/2103.14584).
