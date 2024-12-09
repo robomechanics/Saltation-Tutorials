@@ -15,11 +15,12 @@ def symbolic_dynamics():
     """
     Returns (Tuple[Dict, Dict]): dynamic functions in a nested dict and reset functions in a nested dict.
     """
-    x1, x2, u, dt = sp.symbols("x1 x2 u dt")
+    x1, x2, u, dt, t = sp.symbols("x1 x2 u dt t")
 
     """ Define the states and inputs. """
     inputs = Matrix([u])  # note inputs don't matter
     states = Matrix([x1, x2])
+    time = Matrix([t])
 
     """ Defining the dynamics of the system. """
     fI = Matrix([1, -1])
@@ -52,6 +53,7 @@ def symbolic_dynamics():
 
     """ Take the jacobian of resets with resepct to guards. """
     GIJ = gIJ.jacobian(states)
+    GtIJ = gIJ.jacobian(time)
 
     """ Define the parameters of the system. """
     parameters = Matrix([])
@@ -59,8 +61,9 @@ def symbolic_dynamics():
     rIJ_func = sp.lambdify((states, inputs, dt, parameters), rIJ)
     RIJ_func = sp.lambdify((states, inputs, dt, parameters), RIJ)
 
-    gIJ_func = sp.lambdify((states, inputs, dt, parameters), gIJ)
+    gIJ_func = sp.lambdify((t, states, inputs, dt, parameters), gIJ)
     GIJ_func = sp.lambdify((states, inputs, dt, parameters), GIJ)
+    GtIJ_func = sp.lambdify((t, states, inputs, dt, parameters), GtIJ)
 
     fI_func = sp.lambdify((states, inputs, dt, parameters), fI)
     AI_disc_func = sp.lambdify((states, inputs, dt, parameters), AI_disc)
@@ -79,7 +82,7 @@ def symbolic_dynamics():
         "J": {"f_cont": fJ_func, "A_disc": AJ_disc_func, "y": yJ_func, "C": CJ_func},
     }
     resets = {"I": {"J": {"r": rIJ_func, "R": RIJ_func}}}
-    guards = {"I": {"J": {"g": gIJ_func, "G": GIJ_func}}}
+    guards = {"I": {"J": {"g": gIJ_func, "G": GIJ_func, "Gt": GtIJ_func}}}
     return dynamics, resets, guards
 
 
