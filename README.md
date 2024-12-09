@@ -5,8 +5,9 @@ This repository contains some starter code for the implementation of some basic 
 This code provides an example of how to generate Figure 1 (below) from our paper [Saltation Matrices: The Essential Tool for Linearizing Hybrid Dynamical Systems](https://arxiv.org/abs/2306.06862). It includes implementations for 3 different toy systems: a ball dropping on a slanted surface with frictionless sliding, a ball dropping on a slanted surface with contrained motion due to static friction, and a bouncing ball on a slanted surface. 
 
 Example figures that can be generated with these files:
-![Sticking](https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sticking.png)
-![Sliding](https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sliding.png)
+
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sticking.png" alt="Sticking" width="500">
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sliding.png" alt="Sliding" width="500">
 
 To calculate the saltation and generate these plots, simply run "main.m" in the corrensponding folder of the system your're interested in. If you wish to calculate the saltation matrix for a different system, simply define your new dynamics/guards/resets in the correspodning fileds "flows.m", "guards.m", "resets.m" and "saltation_calc.m" and rerun after updating the system initializaiton in "main.m". The saltation matrix is calculated symbolically in the dynamics files, so no futher update should be needed.  
 
