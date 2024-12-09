@@ -57,6 +57,12 @@ To simulate a different system's dynamics:
 ## Hybrid iLQR
 This code provides an example for implementing the hybrid iLQR algoirthm as defined in [iLQR for Piecewise-Smooth Hybrid Dynamical Systems](https://arxiv.org/abs/2103.14584).
 ### Models
-The model used for the trajectory optimzation is a 1D bouncing ball, as defined in the SFK section above.
+The model used for the trajectory optimzation is a 1D bouncing ball, as defined in the SFK section above. This module also has the option of including a time varying guard (i.e. a paddle moving up and down to bounce the ball). Examples of optimized trajectories are shown below:
+
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sticking.png" alt="Flat Ground" width="500">
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sliding.png" alt="Moving Guard" width="500">
+
+
 ### Structure
+To t
 Run main2.m (or rather, I need to go back and delete main.m since it doesn't generalize w/ the moving guard dynamics :/ )
