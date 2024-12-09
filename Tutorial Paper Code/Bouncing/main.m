@@ -19,7 +19,7 @@ rng(100)
 num_sims = 1; %25;
 
 % x_0 should be a two by one: x = [q1; q1_dot]
-x = 1;
+x = 4;
 x_dot = 0;
 k = 0.25;
 params = set_params();
@@ -30,17 +30,18 @@ params = set_params();
 u = []; 
 
 % length of simluation
-t_f = 4.2;
+t_f = 4; %4.2;
 
 figure;
-y_ground = @(l) 0;  % Equation for the slanted ground
+y_ground = @(l) 0.25*sin(pi*l);  % Equation for the ground
 fplot(y_ground, [0, x+20], 'k--', 'LineWidth', 2);
 ylabel('Horizontal Distance (m)');
 xlabel('time(s)');
 title('Ball Trajectory');
 grid on;
 hold on;
-xlim([3 4.5])
+xlim([0 t_f])
+% xlim([3 4.5])
 
 for i=1:num_sims
     dx = 0; %rand(1, 1)*2 - 1;
@@ -52,7 +53,7 @@ for i=1:num_sims
     y_trajectory = state_vec(:, 1);
     x_trajectory = time_vec; %zeros(size(y_trajectory, 1), 1); %state_vec(:, 2);
     % disp(-y_trajectory./x_trajectory - tan(theta) )
-    plot(x_trajectory(1:2:end), y_trajectory(1:2:end), '.b', 'LineWidth', 2);
+    plot(x_trajectory(1:1:end), y_trajectory(1:1:end), '-.b', 'LineWidth', 2);
     plot(x_trajectory(1), y_trajectory(1), '*c')
     plot(x_trajectory(end), y_trajectory(end), '*c')
     plot(ct, cp, '--r')
