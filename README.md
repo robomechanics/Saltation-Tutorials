@@ -7,8 +7,8 @@ This code provides an example for implementing the SKF as defined in [The Salted
 ### Models
 In the python implementation, 2 different systems are considered: a simple 1D switching system and a 1D bouncing ball with a vertical thruster. Examples of both filtered systems are shown below:
 
-![Simple SKF](Salted_Kalman_Filter/simple_state_space.png)
-![Bouncing Ball SKF](Salted Kalman Filter/bouncing_ball_skf.png)
+![Simple SKF](Salted%20Kalman%20Filter/simple_state_space.png)
+![Bouncing Ball SKF](Salted%20Kalman%20Filter/bouncing_ball_skf.png)
 
 ### Structure
 To the run the examples, run the corresponding python file "simple_hybrid_system.py" or "bouncing_ball_hybrid_system.py". Parameters such as step size, noise covariances, etc. may be adjusted at the bottom of each script before running the function simuluate_timestep(). To simulate another systems dynamics, simply edit the expressions for the flows, guards, and resets in symbolic_dynamics() and rerun the file; no other changes should be necessary as the filter and saltation matrix are calculated automatically in "hybrid_helper_functions.py" and "skf.py".
