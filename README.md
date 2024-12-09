@@ -59,8 +59,8 @@ This code provides an example for implementing the hybrid iLQR algoirthm as defi
 ### Models
 The model used for the trajectory optimzation is a 1D bouncing ball, as defined in the SFK section above. This module also has the option of including a time varying guard (i.e. a paddle moving up and down to bounce the ball). Examples of optimized trajectories are shown below:
 
-<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sticking.png" alt="Flat Ground" width="500">
-<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sliding.png" alt="Moving Guard" width="500">
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_flat_guard_hilqr.png" alt="Flat Ground" width="500">
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_moving_guard_hilqr.png" alt="Moving Guard" width="500">
 
 
 ### Structure
