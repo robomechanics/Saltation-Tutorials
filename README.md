@@ -7,11 +7,30 @@ This code provides an example for implementing the SKF as defined in [The Salted
 ### Models
 In the python implementation, 2 different systems are considered: a simple 1D switching system and a 1D bouncing ball with a vertical thruster. Examples of both filtered systems are shown below:
 
-![Simple SKF](Salted%20Kalman%20Filter/simple_state_space.png)
-![Bouncing Ball SKF](Salted%20Kalman%20Filter/bouncing_ball_skf.png)
+<img src="Salted%20Kalman%20Filter/simple_state_space.png" alt="Simple SKF" style="width:50%;">
+
+<img src="Salted%20Kalman%20Filter/bouncing_ball_skf.png" alt="Bouncing Ball SKF" style="width:50%;">
 
 ### Structure
-To the run the examples, run the corresponding python file "simple_hybrid_system.py" or "bouncing_ball_hybrid_system.py". Parameters such as step size, noise covariances, etc. may be adjusted at the bottom of each script before running the function simuluate_timestep(). To simulate another systems dynamics, simply edit the expressions for the flows, guards, and resets in symbolic_dynamics() and rerun the file; no other changes should be necessary as the filter and saltation matrix are calculated automatically in "hybrid_helper_functions.py" and "skf.py".
+
+To run the examples:
+1. Execute the corresponding Python file:
+   - `simple_hybrid_system.py`
+   - `bouncing_ball_hybrid_system.py`
+2. Adjust parameters such as step size, noise covariances, etc., at the bottom of each script before running:
+   ```python
+   simulate_timestep()
+   ```
+
+To simulate a different system's dynamics:
+- Edit the expressions for the **flows**, **guards**, and **resets** in:
+  ```python
+  symbolic_dynamics()
+  ```
+- Re-run the file. No other changes are needed because:
+  - The filter is automatically computed in `skf.py`.
+  - The saltation matrix is calculated in `hybrid_helper_functions.py`.
+
  
 ## Hybrid iLQR
 This code provides an example for implementing the hybrid iLQR algoirthm as defined in [iLQR for Piecewise-Smooth Hybrid Dynamical Systems](https://arxiv.org/abs/2103.14584).
