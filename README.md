@@ -2,7 +2,7 @@
 This repository contains some starter code for the implementation of some basic saltation methods in MATLAB and python (for SKF only).
 
 ## Tutorial Paper Code
-This code provides an example of how to generate Figure 1 (below) from our paper [Saltation Matrices: The Essential Tool for Linearizing Hybrid Dynamical Systems](https://arxiv.org/abs/2306.06862). It includes implementations for 3 different toy systems: a ball dropping on a slanted surface with frictionless sliding, a ball dropping on a slanted surface with contrained motion due to static friction, and a bouncing ball on a slanted surface. 
+This code provides an example of how to generate Figure 1 (below) from our paper [*Saltation Matrices: The Essential Tool for Linearizing Hybrid Dynamical Systems*](https://arxiv.org/abs/2306.06862). It includes implementations for 3 different toy systems: a ball dropping on a slanted surface with frictionless sliding, a ball dropping on a slanted surface with contrained motion due to static friction, and a bouncing ball on a slanted surface. 
 
 Example figures that can be generated with these files:
 
@@ -25,7 +25,7 @@ Example figures that can be generated with these files:
 > **Note**: The saltation matrix is calculated symbolically in the dynamics files, so no further updates are needed for the matrix calculation. If you want to explore other systems or modify the existing ones, simply change the definitions in the respective files mentioned above. 
 
 ## Salted Kalman Filter
-This code provides an example for implementing the SKF as defined in [The Salted Kalman Filter: Kalman Filtering on Hybrid Dynamical Systems](https://arxiv.org/abs/2007.12233).
+This code provides an example for implementing the SKF as defined in [*The Salted Kalman Filter: Kalman Filtering on Hybrid Dynamical Systems*](https://arxiv.org/abs/2007.12233).
 ### Models
 In the python implementation, 2 different systems are considered: a simple 1D switching system and a 1D bouncing ball with a vertical thruster. Examples of both filtered systems are shown below:
 
