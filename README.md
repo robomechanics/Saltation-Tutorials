@@ -9,7 +9,20 @@ Example figures that can be generated with these files:
 <img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sticking.png" alt="Sticking" width="500">
 <img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sliding.png" alt="Sliding" width="500">
 
-To calculate the saltation and generate these plots, simply run "main.m" in the corrensponding folder of the system your're interested in. If you wish to calculate the saltation matrix for a different system, simply define your new dynamics/guards/resets in the correspodning fileds "flows.m", "guards.m", "resets.m" and "saltation_calc.m" and rerun after updating the system initializaiton in "main.m". The saltation matrix is calculated symbolically in the dynamics files, so no futher update should be needed.  
+#### How to Generate the Saltation Matrix and Figures
+
+1. **Run the `main.m` file** in the corresponding folder for the system you're interested in. This will calculate the saltation matrix and generate the plots.
+   
+2. **To calculate the saltation matrix for a new system:**
+   - Modify the following files with your system's dynamics, guards, and resets:
+     - `flows.m`
+     - `guards.m`
+     - `resets.m`
+     - `saltation_calc.m`
+   
+3. After defining the new system, update the system initialization in the `main.m` file and rerun the code.
+   
+> **Note**: The saltation matrix is calculated symbolically in the dynamics files, so no further updates are needed for the matrix calculation. If you want to explore other systems or modify the existing ones, simply change the definitions in the respective files mentioned above. 
 
 ## Salted Kalman Filter
 This code provides an example for implementing the SKF as defined in [The Salted Kalman Filter: Kalman Filtering on Hybrid Dynamical Systems](https://arxiv.org/abs/2007.12233).
