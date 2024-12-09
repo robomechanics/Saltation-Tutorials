@@ -60,13 +60,12 @@ This code provides an implementation of the **hybrid iLQR algorithm**, as define
 
 ### Models Used for Trajectory Optimization
 
-The example model used for trajectory optimization is a **1D bouncing ball**, as defined in the **SFK section** above. This module also includes the option to model a time-varying guard, such as a paddle moving up and down to bounce the ball. Below are example optimized trajectories:
+The example model used for trajectory optimization is a **1D bouncing ball**, as defined in the **SFK section** above. This module also includes the option to model a time-varying guard, such as a paddle moving up and down to bounce the ball. Below are some examples of optimized trajectories:
 
-- **Flat Ground Model**
-- 
+
 <img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_flat_guard_hilqr.png" alt="Flat Ground" width="500">
   
-- **Moving Guard Model**  
+ 
 <img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_moving_guard_hilqr.png" alt="Moving Guard" width="500">
 
 ### Structure of the Code
