@@ -95,6 +95,7 @@ To simulate a different system's dynamics:
 
 ### MATLAB Structure
 To run, execute one of the scripts (e.g., `bouncing_ball_hybrid_system.m`) to visualize the SKF estimation results for the corresponding hybrid system. Example of output:
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Salted%20Kalman%20Filter/Matlab/bouncing_ball_skf.png" alt="MATLAB SKF" width="500">
 
  
 ## Hybrid iLQR
