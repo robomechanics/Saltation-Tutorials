@@ -139,5 +139,5 @@ To generate the optimized trajectories and plots:
 
 ### Additional Notes
 
-- Ensure you have MATLAB installed to run these scripts.
+- Ensure you have MATLAB installed to run these scripts!
 
