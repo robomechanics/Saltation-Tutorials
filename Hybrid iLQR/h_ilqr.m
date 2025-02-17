@@ -65,7 +65,6 @@ classdef h_ilqr < handle
             % Optimization problem
             
             % Dynamics
-            
             self.init_mode_ = optimization_problem_struct.init_mode;
             self.init_state_ = optimization_problem_struct.init_state;
             self.target_state_ = optimization_problem_struct.target_state;
@@ -105,15 +104,12 @@ classdef h_ilqr < handle
             % Compute the rollout to get the initial trajectory with the
             % initial guess
             [states,inputs] = self.rollout();
-            %             figure(3);
-            %             animate_bouncing_ball(states,self.dt_,inputs)
-            % animate_ball_drop_circle(states,self.dt_)
+
             % Compute the current cost of the initial trajectory
             current_cost = self.compute_cost(states,inputs);
             
             learning_speed = 0.95; % This can be modified, 0.95 is very slow
             low_learning_rate = 0.05; % if learning rate drops to this value stop the optimization
-            %             low_expected_reduction = 1e-2; % Determines optimality
             armijo_threshold = 0.1; % Determines if current line search solve is good (this is typically labeled as "c")
             for ii = 1:self.n_iterations_
                 disp(['Starting iteration: ',num2str(ii)]);
@@ -142,8 +138,7 @@ classdef h_ilqr < handle
                     expected_cost_redu = learning_rate*self.expected_cost_redu_grad_ + learning_rate^2*self.expected_cost_redu_hess_;
                     armijo_flag = cost_difference/expected_cost_redu > armijo_threshold;
                     if(armijo_flag == 1)
-                        % Accept the new trajectory if armijo condition is
-                        % met
+                        % Accept the new trajectory if armijo condition is met
                         current_cost = new_cost;
                         prev_traj = self.states_;
                         self.states_ = new_states;
@@ -295,10 +290,6 @@ classdef h_ilqr < handle
                 impact_mode_vec = [impact_mode_vec;hybrid_timestep_struct.impact_mode_vec];
                 hybrid_transitions = hybrid_transitions + hybrid_timestep_struct.hybrid_transitions;
                 
-                
-                %                 next_state = self.f_(current_state,current_input,self.dt_,self.parameters_);
-                % If we hit a guard apply reset
-                
                 % Store states and inputs
                 states(ii+1,:) = next_state';
                 inputs(ii,:) = current_input'; % in case we have a control law, we store the input used
@@ -346,7 +337,6 @@ classdef h_ilqr < handle
         end
         function [next_state,current_mode,time_step_struct] = simulate_hybrid_timestep(self,current_state,current_input,current_mode,tspan,ii)
             
-            
             impact_states = [];
             reset_states = [];
             impact_mode_vec = [];
@@ -360,7 +350,6 @@ classdef h_ilqr < handle
             % First check if the guard condition is met
             transverse_cond = (self.Dg_{current_mode}(current_state,current_input,self.parameters_)*self.f_{current_mode}(current_state,current_input,self.parameters_))>0;
             if(self.g_{current_mode}(tspan(1), current_state,current_input,self.parameters_)>=0 && transverse_cond == 1)
-                %         disp('');
                 impact_states = [impact_states;current_state'];
                 current_state = self.r_{current_mode}(current_state,current_input,self.parameters_);
                 reset_states = [reset_states;current_state'];
@@ -386,10 +375,8 @@ classdef h_ilqr < handle
             % from the guard ||g||<1 ?
             options = odeset('Events', @(t,x)guardFunctions(t,x,self,current_input,current_mode,self.parameters_),'MaxStep',0.01);
             [t,x,te,xe,ie] = ode45(@(t,x)dynamics(t,x,self,self.f_{current_mode},current_input,self.parameters_),tspan,current_state,options);
-            %               [t,x,te,xe,ie] = ode45(@(t,x)dynamics_input(t,x,current_input,params,current_mode),tspan,current_state,options);
             next_state = x(end,:)';
             while(~isempty(te))
-                %         disp('');
                 impact_states = [impact_states;next_state'];
                 next_state = self.r_{current_mode}(next_state,current_input,self.parameters_);
                 reset_states = [reset_states;next_state'];
@@ -596,7 +583,6 @@ classdef h_ilqr < handle
                 transition_inputs = [transition_inputs;hybrid_timestep_struct.transition_inputs];
                 impact_mode_vec = [impact_mode_vec;hybrid_timestep_struct.impact_mode_vec];
                 hybrid_transitions = hybrid_transitions + hybrid_timestep_struct.hybrid_transitions;
-                %                 next_state = self.f_(current_state,current_input,self.dt_,self.parameters_);
                 % Store states and inputs
                 states(ii+1,:) = next_state';
                 inputs(ii,:) = current_input';
@@ -612,7 +598,6 @@ classdef h_ilqr < handle
             trajectory_struct.reset_diff_time_vec_ = reset_diff_time_vec;
             trajectory_struct.transition_inputs_ = transition_inputs;
             trajectory_struct.impact_mode_vec_ = impact_mode_vec;
-            %             animate_bouncing_ball(states,dt,inputs)
         end
     end
 end

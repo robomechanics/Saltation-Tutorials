@@ -4,12 +4,9 @@
 % Carnegie Mellon University Robomechanics Lab
 
 function [state_vec, Xi_1_vec, Xi_2_vec, t_event, t_vec] = simulate_stick(x_0,u,t_f)
-
     params = set_params();
     domain = 1;
-    
     new_state = x_0;
-    
     t = 0;
     state_vec = [];
     t_vec = [];
@@ -17,9 +14,6 @@ function [state_vec, Xi_1_vec, Xi_2_vec, t_event, t_vec] = simulate_stick(x_0,u,
     Xi_1_vec = {}; % for storing saltation matrix calculations
     Xi_2_vec = {}; % for storing saltation matrix calculations
     
-    % [time,states] = ode45(@(t,x)flows(t,x,u,domain,params),[t,t_f],new_state); 
-    % state_vec = [state_vec; states];
-
     while t < t_f
         % integrate dynamics using ode45 until an event occurs
         options = odeset('Events', @(t,x)guards(t,x,u,domain,params));
@@ -47,7 +41,6 @@ function [state_vec, Xi_1_vec, Xi_2_vec, t_event, t_vec] = simulate_stick(x_0,u,
             t_event = [t_event, prev_time];
 
             % apply reset map after guard is triggered
-%             disp("trigger")
             new_state = resets(prev_time, end_state, u, domain, params)';
 
             % switch domains from 1 to 2, or vice versa

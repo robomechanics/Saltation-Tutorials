@@ -7,13 +7,16 @@ states = [q;q_dot];
 
 % Define the ground to be at 0 height
 a = -y;
+
 % Jacobian of the ground constraint
 A = jacobian(a,y);
+
 % Defining the mass matrix
 M = m*eye(1);
+
 % Defining the block matrix when solving for constrained dynamics and reset
 block_mat = [M,A';
-            A,0];
+             A,0];
 block_mat_inv = inv(block_mat);
 
 % Gravity
@@ -28,8 +31,8 @@ q_ddot = inv(M)*(Y-N);
 % flight
 f1 = [q_dot;q_ddot];
 f2 = [q_dot;q_ddot];
-% Defining the linlearized dynamics of the system
 
+% Defining the linlearized dynamics of the system
 A_lin1 = jacobian(f1,states);
 B_lin1 = jacobian(f1,inputs);
 A_lin2 = jacobian(f2,states);
@@ -46,6 +49,7 @@ DR2 = jacobian(R2,states);
 
 % Guards
 x_p = 0.00005*sin(4*pi*t);
+
 % x_p = 0;
 G1 = -(y - x_p);
 DG1 = jacobian(G1,states);
@@ -74,23 +78,10 @@ matlabFunction(DtG2,'File','calc_Dtg21','Vars',[{t}, {states},{inputs},{paramete
 
 matlabFunction(G1,'File','calc_a1','Vars',[{t}, {states},{inputs},{parameters}]);
 matlabFunction(G2,'File','calc_a2','Vars',[{t}, {states},{inputs},{parameters}]);
-% matlabFunction(Dg2,'File','calc_Dg21')
 matlabFunction(sym(A_lin1),'File','calc_A_lin1','Vars',[{states},{inputs},{parameters}]);
 matlabFunction(sym(A_lin2),'File','calc_A_lin2','Vars',[{states},{inputs},{parameters}]);
 matlabFunction(sym(B_lin1),'File','calc_B_lin1','Vars',[{states},{inputs},{parameters}]);
 matlabFunction(sym(B_lin2),'File','calc_B_lin2','Vars',[{states},{inputs},{parameters}]);
-% % matlabFunction(f,'File','calc_f2','Vars',[{states},{parameters}])
-% matlabFunction(f1,'File','calc_f1','Vars',[{states},{uy},{parameters}])
-% matlabFunction(reset,'File','calc_r12','Vars',[{states},{parameters}])
-% matlabFunction(DR,'File','calc_Dr12','Vars',{parameters})
-% matlabFunction(a,'File','calc_g12','Vars',[{states}])
-% matlabFunction(Dg,'File','calc_Dg12')
-% matlabFunction(coefficients,'File','calc_constraint_coeff')
-% matlabFunction(a,'File','calc_a1','Vars',{states})
-% matlabFunction(y_dot,'File','calc_a2','Vars',{states})
-% 
-% matlabFunction(A_lin1,'File','calc_Df1')
-% matlabFunction(B_lin1,'File','calc_B1','Vars',{parameters})
 %% Discrete
 f1_disc = states+f1*dt;
 f2_disc = states+f2*dt;

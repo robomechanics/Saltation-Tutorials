@@ -1,20 +1,13 @@
 function animate(states, dt)
     % Parameters
-    l = 1;  % Length of the pendulum
     
     % Sample data (replace this with your actual state data)
     N = size(states, 1);  % Number of time steps
     theta = states(:, 1);
-    frames = N - 2;
-    seconds = N*dt;
-
-    fps = frames/seconds
     
     % Create video writer object
     videoFile = 'bouncing_animation.mp4';
     writerObj = VideoWriter(videoFile, 'MPEG-4');
-    % writerObj.Quality = 100;
-    % writerObj.FrameRate = floor(fps);  % Adjust the frame rate as needed
     open(writerObj);
     
     % Create figure
@@ -25,10 +18,7 @@ function animate(states, dt)
     for i = 1:N
         drawnow limitrate
         disp(["iteration: ", num2str(i)])
-        % % Pendulum configuration
-        % x = l * cos(theta(i) - pi/2);
-        % y = l * sin(theta(i) - pi/2);
-        % 
+
         % Plot pendulum
         x = 0;
         y = theta(i);
@@ -42,7 +32,6 @@ function animate(states, dt)
         axis equal;
         xlim([-1 1])
         ylim([-0.5 5])
-        % axis([-1.5*l, 1.5*l, -1.5*l, 1.5*l]);  % Adjust axis limits as needed
         title(['Time (s): ', num2str((i-1)*dt)]);
         xlabel('x');
         ylabel('y');
@@ -51,9 +40,6 @@ function animate(states, dt)
         % Capture frame for video
         frame = getframe(gcf);
         writeVideo(writerObj, frame);
-    
-        % Pause to control the animation speed
-        % pause(dt);
     end
     
     % Close video writer

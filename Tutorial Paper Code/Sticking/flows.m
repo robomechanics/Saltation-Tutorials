@@ -1,5 +1,4 @@
 function dxVec = flows(t, x, u, domain, params)
-
     g = params.g;
     theta = params.theta;
         

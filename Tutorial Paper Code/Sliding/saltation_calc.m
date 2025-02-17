@@ -3,9 +3,8 @@ clc
 
 syms x y x_dot y_dot theta g t real 
 parameters = [g theta];
-%%
-states = [x; y; x_dot; y_dot];
 
+states = [x; y; x_dot; y_dot];
 neg = 1;
 
 % mode 1 is descent. mode 2 is sliding
@@ -31,7 +30,6 @@ g1 = x*sin(theta) + y*cos(theta);
 Dg1 = jacobian(g1,states);
 
 Dtg1 = 0;
-
 
 Xi_1 = simplify(DR12+(f2 - DR12*f1 - DtR12)*Dg1/(Dtg1 + Dg1*f1));
 Xi_2 = simplify(DR12);

@@ -1,6 +1,5 @@
 function [value,isterminal,direction] = guards(t,x,u,domain,params)
     x_p = 0.25*sin(pi*t);
-%     x_p = 0;
     y = x(1) - x_p;
     y_dot = x(2);
     

@@ -4,6 +4,7 @@ clc
 
 % Compute symbolic dynamics and create functions
 bouncing_dynamics();
+
 % Initialize timings
 dt = 0.004;
 start_time = 0;
@@ -20,6 +21,7 @@ x_goal = target_state;
 
 % Initial guess of zeros, but you can change it to any guess
 initial_guess = -100.0*ones(size(time_span,2),1);
+
 % Define weighting matrices
 Q_k = zeros(n_states,n_states); % zero weight to penalties along a strajectory since we are finding a trajectory
 R_k = 1*(5*10^-7 / dt)*eye(n_inputs);
@@ -73,6 +75,7 @@ dynamics_struct.salts = salts;
 dynamics_struct.parameters = parameters;
 
 ilqr_ = h_ilqr(optimization_struct,dynamics_struct);
+
 % Solve
 [states,inputs,modes,trajectory_struct,k_feedforward,K_feedback,final_cost,expected_reduction, rollout_states, rollout_inputs, prev_traj, iter] = ilqr_.solve();
 save('single-bounce-trajectory.mat','states','inputs','modes','trajectory_struct','dt','parameters','k_feedforward','K_feedback'); % Save trajectory to track later
@@ -89,7 +92,6 @@ h3 = scatter(states(1,1),states(1,2), 200, 'MarkerFaceColor', [129, 137, 247]/25
 legend([h3, h4, h1,h2],"Initial State", "Rollout Trajectory", "h-iLQR Trajectory","Goal State");
 xlabel('$$y$$', 'Interpreter', 'latex');
 ylabel('$$\dot{y}$$', 'Interpreter', 'latex');
-% xlim([])
 title("Bouncing Ball Trajectory")
 hold off
 
@@ -102,32 +104,13 @@ p2 = plot(rollout_states(:,1), 'k');
 hold on
 p3 = scatter(size(states, 1), x_goal(1),100, 'MarkerFaceColor', [247, 114, 174]/255, 'MarkerEdgeColor', [0, 0, 0]);
 hold on
-% p4 = quiver(1+1:size(states, 1), states(2:end,1)', zeros(1, size(states, 1)-1), diff(2:end)', 'AutoScaleFactor', 0.02);
-hold on
 y_ground = @(l) 0.00005*sin(4*pi*l*dt);  % Equation for the ground
 p4 = fplot(y_ground, 'k--', 'LineWidth', 2);
-% hold on
-% p5 = plot(prev_traj(:,1), 'b--');
 xlabel("Timestep")
 ylabel("y")
 legend([p1, p2, p3, p4], "h-iLQR", "Rollout", "Goal State", "Guard")
 title("Iteration: " + num2str(iter) + ", Position")
 
-% xlim([0 250])
 hold off;
 xlim([0, 252])
 
-% % input vs time
-% figure(3);
-% g1 = plot(inputs, 'k');
-% hold on
-% xlabel("timestep")
-% ylabel("input")
-% legend([g1], "h-iLQR")
-% title("Position over time")
-% hold off;
-% xlim([0, 252])
-
-
-%% animate results
-% animate(states, dt)

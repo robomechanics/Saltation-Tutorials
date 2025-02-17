@@ -3,7 +3,7 @@ clc
 
 syms y y_dot x_P x_P_dot x_P_ddot alpha g t real 
 parameters = [alpha g];
-%%
+
 states = [y; y_dot];
 
 % mode 1 is descent. mode 2 is ascent
