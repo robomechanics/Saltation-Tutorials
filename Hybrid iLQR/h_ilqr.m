@@ -125,9 +125,7 @@ classdef h_ilqr < handle
                 end
                 learning_rate = 1;
                 armijo_flag = 0;
-                % Execute linesearch until the armijo condition is met (for
-                % now just check if the cost decreased) TODO add real
-                % armijo condition
+                % Execute linesearch until the armijo condition is met (for now just check if the cost decreased)
                 while(learning_rate > 0.05 && armijo_flag == 0)
                     % Compute forward pass
                     [new_states,new_inputs,new_modes,new_trajectory_struct]=forwards_pass(self,learning_rate);
@@ -174,69 +172,6 @@ classdef h_ilqr < handle
             trajectory_struct = self.trajectory_struct_;
             rollout_states = self.rollout_states;
             rollout_inputs = self.rollout_inputs;
-        end
-        function [pre_impact_collars_state,pre_impact_collars_input,post_impact_collars_state,post_impact_collars_input] = hybrid_collars(self)
-            % Creates hybrid collars for the current solve
-            hybrid_idxs = self.trajectory_struct_.impact_idx_vec_;
-            n_transitions = numel(hybrid_idxs);
-            n_timesteps = numel(self.time_span_);
-            pre_impact_collars_state = zeros(n_transitions,n_timesteps,self.n_states_);
-            pre_impact_collars_input = zeros(n_transitions,n_timesteps,self.n_inputs_);
-            
-            post_impact_collars_state = zeros(n_transitions,n_timesteps,self.n_states_);
-            post_impact_collars_input = zeros(n_transitions,n_timesteps,self.n_inputs_);
-            for ii = 1:n_transitions
-                current_idx = self.trajectory_struct_.impact_idx_vec_(ii);
-                % Make a collar for pre impact
-                pre_impact_mode = self.trajectory_struct_.impact_mode_vec_(ii);
-                pre_impact_state = self.trajectory_struct_.impact_states_(ii,:)';
-                pre_impact_input = self.trajectory_struct_.transition_inputs_(ii,:)';
-                
-                % Set the timespan to reach up until the next impact.
-                % If there isn't a next impact, then go until end index
-                if(ii == n_transitions)
-                    pre_impact_range = (current_idx):(n_timesteps);
-                    pre_impact_timespan = self.dt_*(pre_impact_range);
-                else
-                    pre_impact_range = (current_idx):(self.trajectory_struct_.impact_idx_vec_(ii+1)-1);
-                    pre_impact_timespan = self.dt_*(pre_impact_range);
-                end
-               
-                [~,pre_impact_collar_state] = ...
-                    ode45(@(t,x)dynamics(t,x,self,self.f_{pre_impact_mode},pre_impact_input,self.parameters_),...
-                    pre_impact_timespan,pre_impact_state);
-                pre_impact_collar_input = repmat(pre_impact_input',numel(pre_impact_range),1);
-                
-                pre_impact_collars_state(ii,pre_impact_range,:) = pre_impact_collar_state;
-                pre_impact_collars_input(ii,pre_impact_range,:) = pre_impact_collar_input;
-                
-                % Make a collar for post impact
-                post_impact_mode = self.trajectory_struct_.reset_mode_vec_(ii);
-                post_impact_state = self.trajectory_struct_.reset_states_(ii,:)';
-                % Actually for input extension, it makes more sense to use
-                % the input afterwards due to the assumption that we only
-                % use the linearizatino of the impact mode
-                post_impact_input = self.inputs_(current_idx+1,:)';
-                
-                % Set the timespan to go backwards until the previous impact.
-                % If there isn't a previous impact, then go until begining
-                % index
-                if(ii == 1)
-                    post_impact_range = flip(1:(current_idx));
-                    post_impact_timespan = self.dt_*(post_impact_range-1);
-                else
-                    post_impact_range = flip((self.trajectory_struct_.impact_idx_vec_(ii-1)-1):(current_idx));
-                    post_impact_timespan = self.dt_*(post_impact_range-1);
-                end
-               
-                [~,post_impact_collar_state] = ...
-                    ode45(@(t,x)dynamics(t,x,self,self.f_{post_impact_mode},post_impact_input,self.parameters_),...
-                    post_impact_timespan,post_impact_state);
-                post_impact_collar_input = repmat(post_impact_input',numel(post_impact_range),1);
-                
-                post_impact_collars_state(ii,post_impact_range,:) = post_impact_collar_state;
-                post_impact_collars_input(ii,post_impact_range,:) = post_impact_collar_input;
-            end
         end
         
         function total_cost = compute_cost(self,states,inputs)

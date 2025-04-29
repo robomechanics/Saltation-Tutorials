@@ -1,3 +1,23 @@
+"""
+hybrid_simulator.py
+
+This module defines a HybridSimulator class for simulating hybrid (mode-switching) dynamical systems 
+over discrete timesteps using SciPy's `solve_ivp` ODE solver. 
+The simulator handles continuous evolution, guard detection, mode switching, and reset mapping.
+
+Key Features:
+- Integrates continuous dynamics with additive process noise.
+- Detects guard events that trigger hybrid mode transitions.
+- Applies discrete reset maps at mode transitions.
+- Handles multiple hybrid events within a single timestep.
+- Provides access to the current true state and optionally noisy measurements.
+
+Main Class:
+- HybridSimulator:
+    - simulate_timestep: advances the system by one timestep (handling any hybrid transitions).
+    - get_measurement: returns the current measurement with optional Gaussian measurement noise.
+    - get_state: returns a copy of the current system state.
+"""
 
 import numpy as np
 from scipy.integrate import solve_ivp
@@ -105,6 +125,7 @@ class HybridSimulator:
         self._current_state = current_state
 
     def get_measurement(self, measurement_noise_flag = False):
+        """Return noisy or noise-free measurement depending on flag (for testing)"""
         measurement = self._dynamics_dict[self._current_mode]['y'](
                 self._current_state,
                 self._parameters,

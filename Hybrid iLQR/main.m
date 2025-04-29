@@ -3,6 +3,8 @@ clear all;
 clc
 
 % Compute symbolic dynamics and create functions
+addpath(genpath('dynamics_helpers'));
+
 bouncing_dynamics();
 
 % Initialize timings
@@ -78,9 +80,11 @@ ilqr_ = h_ilqr(optimization_struct,dynamics_struct);
 
 % Solve
 [states,inputs,modes,trajectory_struct,k_feedforward,K_feedback,final_cost,expected_reduction, rollout_states, rollout_inputs, prev_traj, iter] = ilqr_.solve();
-save('single-bounce-trajectory.mat','states','inputs','modes','trajectory_struct','dt','parameters','k_feedforward','K_feedback'); % Save trajectory to track later
+save('hilqr_results/single-bounce-trajectory.mat','states','inputs','modes','trajectory_struct','dt','parameters','k_feedforward','K_feedback'); % Save trajectory to track later
 
 %% plot results
+output_dir = "hilqr_results";
+
 figure(1);
 h1 = plot(states(:,1),states(:,2),'k');
 hold on
@@ -94,6 +98,8 @@ xlabel('$$y$$', 'Interpreter', 'latex');
 ylabel('$$\dot{y}$$', 'Interpreter', 'latex');
 title("Bouncing Ball Trajectory")
 hold off
+
+saveas(gcf, fullfile(output_dir,'hilqr_phase_plot.png'));
 
 % pos vs time plot
 diff = -states(:,1) + prev_traj(:, 1);
@@ -113,4 +119,13 @@ title("Iteration: " + num2str(iter) + ", Position")
 
 hold off;
 xlim([0, 252])
+
+saveas(gcf, fullfile(output_dir,'hilqr_trajectory.png'));
+
+
+% animate simulation if desired
+make_video = 0; % change to 1 if you would like to save video in the 
+if make_video
+    animate(states, dt)
+end
 

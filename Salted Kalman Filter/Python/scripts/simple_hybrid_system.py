@@ -1,3 +1,26 @@
+"""
+simple_hybrid_system.py
+
+This script simulates a simple 2D hybrid dynamical system using a Salted Kalman Filter (SKF) for hybrid state estimation.
+The system switches between two modes:
+- Mode 'I': constant dynamics with a negative flow component
+- Mode 'J': constant dynamics with a positive flow component
+
+A guard triggers a reset when the first state variable crosses zero.
+The SKF tracks the system state despite noisy measurements and switches modes upon crossing the guard.
+
+Key Components:
+- Defines symbolic continuous dynamics, measurements, resets, and guard conditions.
+- Constructs noise models for process and measurement noise.
+- Initializes a Salted Kalman Filter (SKF) using the symbolic hybrid model.
+- Simulates the hybrid system with process noise and measurement noise.
+- Performs SKF-based state estimation across hybrid transitions.
+- Visualizes:
+    - Actual system trajectory
+    - Noisy measurements
+    - Estimated trajectory (SKF output)
+"""
+
 import sys
 import pathlib
 import time
@@ -18,7 +41,7 @@ def symbolic_dynamics():
     x1, x2, u, dt, t = sp.symbols("x1 x2 u dt t")
 
     """ Define the states and inputs. """
-    inputs = Matrix([u])  # note inputs don't matter
+    inputs = Matrix([u])  # note: inputs are included for generality but are unused in this system
     states = Matrix([x1, x2])
     time = Matrix([t])
 
@@ -30,9 +53,9 @@ def symbolic_dynamics():
     yI = Matrix([x1, x2])
     yJ = Matrix([x1, x2])
 
-    """ Discretize the dynamics usp.sing euler integration. """
+    """ Discretize the dynamics using euler integration. """
     fI_disc = states + fI * dt
-    fJ_disc = states + fI * dt
+    fJ_disc = states + fJ * dt
 
     """ Take the jacobian with respect to states and inputs. """
     AI_disc = fI_disc.jacobian(states)
@@ -135,6 +158,8 @@ hybrid_simulator = HybridSimulator(
     parameters=parameters
 )
 
+""" Run SKF simulation """
+
 n_simulate_timesteps = 50
 timesteps = np.arange(0.0,n_simulate_timesteps*dt,dt)
 measurements = np.zeros((n_simulate_timesteps-1,n_states))
@@ -151,6 +176,8 @@ for time_idx in range(1,n_simulate_timesteps):
     measurements[time_idx-1,:] = hybrid_simulator.get_measurement(measurement_noise_flag=True)
     skf.predict(timesteps[time_idx],zero_input)
     filtered_states[time_idx,:], current_cov = skf.update(timesteps[time_idx],zero_input,measurements[time_idx-1,:])
+
+""" Visualize results """
 
 plt.plot(actual_states[:,0],actual_states[:,1],'k-',label='Actual states')
 plt.plot(measurements[:,0],measurements[:,1],'r.',label='Measurements')

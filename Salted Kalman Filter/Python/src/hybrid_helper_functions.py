@@ -1,3 +1,19 @@
+"""
+hybrid_helper_functions.py
+
+This file provides utility functions for simulating hybrid dynamical systems using
+SciPy's `solve_ivp` integrator. It includes support for continuous integration, guard detection,
+mode switching, and saltation matrix computation for hybrid systems.
+
+Key Components:
+- `solve_ivp_dynamics_func`: Wraps a continuous dynamics function into a `solve_ivp`-compatible format,
+  optionally adding Gaussian process noise.
+- `solve_ivp_guard_funcs`: Wraps hybrid guards into `solve_ivp` event functions for detecting mode transitions.
+- `solve_ivp_extract_hybrid_events`: Extracts hybrid events (mode switches) from a completed `solve_ivp` simulation.
+- `compute_saltation_matrix`: Computes the saltation matrix used to propagate state uncertainty across
+  hybrid transitions (discontinuities).
+"""
+
 import numpy as np
 
 def solve_ivp_dynamics_func(dynamics_dict, mode, inputs, dt, parameters, process_gaussian_noise = None):
@@ -38,7 +54,7 @@ def solve_ivp_extract_hybrid_events(sol, possible_modes):
     for idx in range(len(possible_modes)):
         """Assume we cannot activate multiple guards at once."""
         if sol.t_events[idx]:
-            return sol.y_events[idx].flatten(), sol.t_events[idx], possible_modes[idx] # Flatten creates a copy. TODO: change to reshape.
+            return sol.y_events[idx].flatten(), sol.t_events[idx], possible_modes[idx] # Flatten used here for compatibility — could replace with reshape if needed.
     return None, None, None
 
 
@@ -57,7 +73,7 @@ def compute_saltation_matrix(
 ):
     """
     Computes the saltation matrix.
-    TODO: Add in time dependencies.
+    Note: Saltation matrix currently assumes time-invariant reset and guard maps.
     """
     if post_event_state is None:
         """ Compute reset if not post event state is given. """

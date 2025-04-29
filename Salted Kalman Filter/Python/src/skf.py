@@ -1,3 +1,22 @@
+"""
+skf.py
+
+This module implements the Salted Kalman Filter (SKF) for hybrid (mode-switching) dynamical systems.
+The SKF extends standard Kalman filtering to handle hybrid transitions by incorporating saltation matrices 
+to correctly propagate covariance across discrete resets.
+
+Key Features:
+- Continuous-time state prediction via ODE integration with discrete event detection.
+- State and covariance propagation across hybrid transitions using saltation matrices.
+- Measurement update step with standard Kalman filter correction.
+- Hybrid posterior updates when measurements indicate mode transitions.
+
+Main Class:
+- SKF:
+    - predict: Performs a prior update (state and covariance prediction) over one timestep, handling hybrid transitions.
+    - update: Performs a posterior update using a new noisy measurement and adjusts state/covariance if mode transitions occur.
+"""
+
 import sys
 import pathlib
 import numpy as np
@@ -81,7 +100,7 @@ class SKF:
                 hybrid_event_state, inputs, self._dt, self._parameters
             ).reshape(np.shape(hybrid_event_state))
 
-            """ Apply covairance updates: dynamics and saltation matrix."""
+            """ Apply covariance updates: dynamics and saltation matrix."""
             dynamics_cov = self._dynamics_dict[self._current_mode]["A_disc"](
                 current_start_state, inputs, sol.t[-1] - sol.t[0], self._parameters
             )
@@ -142,8 +161,6 @@ class SKF:
         dynamics_cov = self._dynamics_dict[self._current_mode]["A_disc"](
             current_start_state, inputs, sol.t[-1] - sol.t[0], self._parameters
         )
-
-        print(current_time)
         
         self._current_cov = (
             dynamics_cov @ self._current_cov @ dynamics_cov.T
@@ -179,14 +196,12 @@ class SKF:
         self._current_state = self._current_state + K@residual
         self._current_cov = self._current_cov - K@C@self._current_cov
 
-        """ Check guard conditions. If any guard is has been reached, then apply hybrid posterior update. """
+        """ Check guard conditions. If any guard has been reached, then apply hybrid posterior update. """
         current_guards, possible_modes = solve_ivp_guard_funcs(
             self._guards_dict, self._current_mode, current_input, self._dt, self._parameters
         )
         for guard_idx in range(len(current_guards)):
-            """TODO: Add in time component. """
             if current_guards[guard_idx](current_time, self._current_state) < 0:
-                print("Debug: Applying posterior hybrid update.")
                 new_mode = possible_modes[guard_idx]
                 """Apply reset."""
                 new_state = self._resets_dict[self._current_mode][new_mode]['r'](

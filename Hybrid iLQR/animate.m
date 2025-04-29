@@ -6,7 +6,7 @@ function animate(states, dt)
     theta = states(:, 1);
     
     % Create video writer object
-    videoFile = 'bouncing_animation.mp4';
+    videoFile = 'hilqr_results/bouncing_animation.mp4';
     writerObj = VideoWriter(videoFile, 'MPEG-4');
     open(writerObj);
     

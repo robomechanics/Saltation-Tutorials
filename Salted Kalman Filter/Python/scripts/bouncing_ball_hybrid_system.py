@@ -1,3 +1,22 @@
+"""
+bouncing_ball_hybrid_system.py
+
+This script simulates a 1D bouncing ball system using a Salted Kalman Filter (SKF) for hybrid state estimation.
+The ball has two modes: 'I' (falling) and 'J' (rising). Impacts with the ground (guard at y=0) are modeled with
+a coefficient of restitution. The SKF tracks the ball's position and velocity despite noisy measurements.
+
+Key Components:
+- Defines symbolic continuous and discrete dynamics, measurements, resets, and guards for the hybrid system.
+- Constructs noise models for the process and measurement noise.
+- Initializes a Salted Kalman Filter (SKF) using the symbolic models.
+- Simulates ground-truth dynamics using a hybrid simulator with process noise and measurement noise.
+- Performs SKF-based state estimation across hybrid transitions.
+- Visualizes:
+    - Actual trajectory
+    - Noisy measurements
+    - Estimated trajectory (SKF output)
+"""
+
 import sys
 import pathlib
 import time
@@ -11,10 +30,11 @@ sys.path.append(str(pathlib.Path(__file__).parent.parent))
 from src.skf import SKF
 from src.hybrid_simulator import HybridSimulator
 
+
 def symbolic_dynamics():
     """
     Returns (Tuple[Dict, Dict]): dynamic functions in a nested dict and reset functions in a nested dict.
-    TODO: FILL IN WITH BOUNCING BALL. Modes are {'up','down'}. e is coefficient of resititution.
+    Modes are {'up','down'}. e is coefficient of resititution.
     """
     q, q_dot, e, g, u, dt, t = sp.symbols("q q_dot e g u dt t")
 
@@ -32,9 +52,9 @@ def symbolic_dynamics():
     yI = Matrix([q, q_dot])
     yJ = Matrix([q, q_dot])
 
-    """ Discretize the dynamics usp.sing euler integration. """
+    """ Discretize the dynamics using euler integration. """
     fI_disc = states + fI * dt
-    fJ_disc = states + fI * dt
+    fJ_disc = states + fJ * dt
 
     """ Take the jacobian with respect to states and inputs. """
     AI_disc = fI_disc.jacobian(states)
@@ -67,7 +87,7 @@ def symbolic_dynamics():
 
 
     """ Define the parameters of the system. """
-    parameters = Matrix([e, g])
+    parameters = Matrix([e, g])  # parameters = [coefficient of restitution, gravity]
 
     rIJ_func = sp.lambdify((states, inputs, dt, parameters), rIJ)
     RIJ_func = sp.lambdify((states, inputs, dt, parameters), RIJ)
@@ -153,12 +173,13 @@ hybrid_simulator = HybridSimulator(
     parameters=parameters
 )
 
+""" Run SKF simulation """
 n_simulate_timesteps = 100
 timesteps = np.arange(0.0,n_simulate_timesteps*dt,dt)
 measurements = np.zeros((n_simulate_timesteps-1,n_states))
 actual_states = np.zeros((n_simulate_timesteps,n_states))
 filtered_states = np.zeros((n_simulate_timesteps,n_states))
-# guard = 0.25*np.sin(4*np.pi*timesteps*dt)
+# guard = 0.25*np.sin(4*np.pi*timesteps*dt) #uncomment for moving guard
 guard = 0.0*timesteps
 
 actual_states[0,:] = hybrid_simulator.get_state()
@@ -172,14 +193,17 @@ for time_idx in range(1,n_simulate_timesteps):
     skf.predict(timesteps[time_idx],zero_input)
     filtered_states[time_idx,:], current_cov = skf.update(timesteps[time_idx],zero_input,measurements[time_idx-1,:])
 
-# plt.plot(actual_states[:,0],actual_states[:,1],'k-',label='Actual states')
-# plt.plot(measurements[:,0],measurements[:,1],'r.',label='Measurements')
-# plt.plot(filtered_states[:,0], filtered_states[:,1],'b--',label='Filtered states')
-# plt.legend()
-# plt.xlabel(r"$y$")
-# plt.ylabel(r"$\dot{y}$")
-# plt.title("1D Bouncing Ball System")
-# plt.show()
+
+""" Visualize results """
+
+plt.plot(actual_states[:,0],actual_states[:,1],'k-',label='Actual states')
+plt.plot(measurements[:,0],measurements[:,1],'r.',label='Measurements')
+plt.plot(filtered_states[:,0], filtered_states[:,1],'b--',label='Filtered states')
+plt.legend()
+plt.xlabel(r"$y$")
+plt.ylabel(r"$\dot{y}$")
+plt.title("1D Bouncing Ball System")
+plt.show()
 
 plt.plot(actual_states[:,0],'k-',label='Actual states')
 plt.plot(measurements[:,0],'r.',label='Measurements')
@@ -191,11 +215,11 @@ plt.ylabel(r"$y$")
 plt.title("1D Bouncing Ball Position")
 plt.show()
 
-# plt.plot(actual_states[:,1],'k-',label='Actual states')
-# plt.plot(measurements[:,1],'r.',label='Measurements')
-# plt.plot(filtered_states[:,1],'b--',label='Filtered states')
-# plt.legend()
-# plt.xlabel(r"Timestep")
-# plt.ylabel(r"$\dot{y}$")
-# plt.title("1D Bouncing Ball Velocity")
-# plt.show()
+plt.plot(actual_states[:,1],'k-',label='Actual states')
+plt.plot(measurements[:,1],'r.',label='Measurements')
+plt.plot(filtered_states[:,1],'b--',label='Filtered states')
+plt.legend()
+plt.xlabel(r"Timestep")
+plt.ylabel(r"$\dot{y}$")
+plt.title("1D Bouncing Ball Velocity")
+plt.show()
