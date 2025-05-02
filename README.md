@@ -46,15 +46,15 @@ This code provides an example of how to generate Figure 1 (below) from our paper
   
 Example figures that can be generated with these files:
 
-<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sticking.png" alt="Sticking" width="500">
-<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/plot_sliding.png" alt="Sliding" width="500">
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/Example%20plots%20and%20animations/plot_sticking.png" alt="Sticking" width="500">
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Tutorial%20Paper%20Code/Example%20plots%20and%20animations/plot_sliding.png" alt="Sliding" width="500">
 
 #### How to Generate the Saltation Matrix and Figures
 
-1. **Run the `main.m` file** in the corresponding folder for the system you're interested in. This will calculate the saltation matrix and generate the plots.
+1. **Run the `main.m` file** in the home folder and select the system you're interested in by modifiyng the selection variable in line 16. The selection of this parameter will automatically calculate the saltation matrix and generate the plots.
    
 2. **To calculate the saltation matrix for a new system:**
-   - Modify the following files with your system's dynamics, guards, and resets:
+   - Add a new subfolder to the `Dynamics Files` folder and modify the following files with your system's dynamics, guards, and resets:
      - `flows.m`
      - `guards.m`
      - `resets.m`
@@ -106,17 +106,14 @@ This code provides an implementation of the **hybrid iLQR algorithm**, as define
 
 The example model used for trajectory optimization is a **1D bouncing ball**, as defined in the **SFK section** above. This module also includes the option to model a time-varying guard, such as a paddle moving up and down to bounce the ball. Below are some examples of optimized trajectories:
 
-
-<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_flat_guard_hilqr.png" alt="Flat Ground" width="500">
-  
- 
-<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/bouncing_ball_moving_guard_hilqr.png" alt="Moving Guard" width="500">
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/example_hilqr_results/bouncing_ball_flat_guard_hilqr.png" alt="Flat Ground" width="500">
+<img src="https://github.com/robomechanics/Saltation-Tutorials/blob/dev_dfriasfr/Hybrid%20iLQR/example_hilqr_results/bouncing_ball_moving_guard_hilqr.png" alt="Moving Guard" width="500">
 
 ### Structure of the Code
 
 To generate the optimized trajectories and plots:
 
-1. **Run the `main.m` script**. This will perform the trajectory optimization for the 1D bouncing ball system.
+1. **Run the `main.m` script**. This will perform the trajectory optimization for the 1D bouncing ball system. All resulting plots and animations will be stored in the `hilqr_results` folder.
    
 2. **Symbolic Dynamics Calculation**: The symbolic dynamics are automatically computed by the `bouncing_dynamics()` function at the beginning of the script. No further modification is needed, apart from updating the initial states and control input guesses.
 
@@ -129,7 +126,7 @@ To generate the optimized trajectories and plots:
    These generated functions are named: `calc_A.m`, `calc_f1.m`, `calc_salt12.m`, etc. **Do not modify these directly**.
 
 3. **Modifying or Modeling a New System**:  
-   - To model a new system or modify the existing one, you need to update the expressions in the `bouncing_dynamics.m` file and rerun the optimization in `main.m`.
+   - To model a new system or modify the existing one, you need to update the expressions in the `bouncing_dynamics.m` file and rerun the optimization in `main.m`. The dynamics files will be stored in the folder titled `dynamics_helpers` and will be called automatically by `maim.m`.
 
 4. **Trajectory Optimization**:  
    - The optimization is performed using the `hilqr.m` class. This class handles the forwards/backwards passes of the hybrid iLQR algorithm. 
