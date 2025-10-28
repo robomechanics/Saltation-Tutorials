@@ -138,3 +138,5 @@ To generate the optimized trajectories and plots:
 
 - Ensure you have MATLAB installed to run these scripts.
 
+---
+This code is based on work that was supported in part by the U.S. Army Research Office under Grant W911NF-19-1-0080 and in part by the National Science Foundation under Grant ECCS-1924723 and Grant CMMI-1943900.
